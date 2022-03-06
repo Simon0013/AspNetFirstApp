@@ -44,6 +44,18 @@ namespace WebApplication1.Models
 				return false;
 			return false;
 		}
+		public bool dropFromDatabase()
+        {
+			if (!inDatabase())
+				return false;
+			return false;
+		}
+		public static bool dropFromDatabaseById(string id)
+        {
+			if (!getUserById(id).inDatabase())
+				return false;
+			return false;
+		}
 		public bool addNewComment(string id, Discussion discussion)
         {
 			Comment comment = new Comment(id, discussion, this);

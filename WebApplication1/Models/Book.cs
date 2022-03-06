@@ -31,6 +31,18 @@ namespace WebApplication1.Models
 				return false;
 			return false;
 		}
+		public bool dropFromDatabase()
+		{
+			if (!inDatabase())
+				return false;
+			return false;
+		}
+		public static bool dropFromDatabaseById(string id)
+		{
+			if (!getBookById(id).inDatabase())
+				return false;
+			return false;
+		}
 		public bool inDatabase()
 		{
 			return false;
