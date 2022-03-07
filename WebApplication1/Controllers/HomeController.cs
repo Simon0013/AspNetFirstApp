@@ -28,6 +28,16 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        public IActionResult Registration()
+        {
+            return View("~/Views/Database/Registration.cshtml");
+        }
+
+        public IActionResult Autorisation()
+        {
+            return View("~/Views/Database/Autorisation.cshtml");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

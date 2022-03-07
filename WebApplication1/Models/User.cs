@@ -1,16 +1,23 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
 {
 	public class User
 	{
 		public string Id { get; set; }
+		[Display(Name = "Имя")]
 		public string Name { get; set; }
+		[Display(Name = "Фамилия")]
 		public string Surname { get; set; }
+		[Display(Name = "Отчество")]
 		public string Patronymic { get; set; }
+		[Display(Name = "Дата регистрации")]
 		public DateTime Registration { get; set; }
 		public bool IsAdmin { get; set; }
+		[Display(Name = "Электронная почта")]
 		public string Email { get; set; }
+		[Display(Name = "Пароль")]
 		public string Password { get; set; }
 
 		public User(string id, string name, string surname, string patronymic, DateTime registration, bool isAdmin, string email, string password)
@@ -33,6 +40,8 @@ namespace WebApplication1.Models
 		public User(string id, string name, string surname, bool isAdmin, string email, string password) :
 			this(id, name, surname, DateTime.Now, isAdmin, email, password)
 		{}
+		public User(): this("", "", "", false, "", "")
+        {}
 
 		public static User getUserById(string id)
         {

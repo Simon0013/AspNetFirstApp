@@ -1,0 +1,41 @@
+﻿@model WebApplication1.Models.User
+
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<h1>Регистрация пользователя</h1><br>
+<p align="justify">Уважаемый посетитель! <br>Для создания учётной записи в портале заполните следующую форму и нажимите "Зарегистрироваться"</p>
+
+<form asp-controller="Database" asp-action="Registration">
+    <div>
+        <div class="form-group">
+            <label asp-for="Surname"></label>
+            <input type="text" asp-for="Surname" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input type="text" asp-for="Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Patronymic"></label>
+            <input type="text" asp-for="Patronymic" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input type="text" asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Зарегистрироваться" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>
+
+@if (ViewData.Keys.Contains("Message"))
+{
+    <h4 style="color: red">@ViewData["Message"]</h4>
+}
