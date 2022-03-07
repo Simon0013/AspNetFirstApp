@@ -20,6 +20,8 @@ namespace WebApplication1.Models
 			Count = count;
 			ContentUri = contentUri;
 		}
+		public Book(): this("", "", "", DateTime.Now.Year, 0, null)
+        {}
 
 		public static Book getBookById(string id)
         {

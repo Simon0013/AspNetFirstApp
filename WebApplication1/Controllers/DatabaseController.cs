@@ -53,5 +53,60 @@ namespace WebApplication1.Controllers
 			}
 			return View("SuccessLogin");
         }
+		[HttpPost]
+		public IActionResult AddBook(Book book)
+        {
+			if (string.IsNullOrEmpty(book.Name))
+            {
+				ViewData["Message"] = "Имя книги не задано";
+				return View();
+			}
+			if (string.IsNullOrEmpty(book.Publisher))
+            {
+				ViewData["Message"] = "Издатель книги не задан";
+				return View();
+			}
+			if (book.ContentUri == null)
+            {
+				ViewData["Message"] = "Ссылка на файл книги не задана";
+				return View();
+			}
+			return View();
+        }
+		[HttpPost]
+		public IActionResult CreateDiscussion(Discussion discussion)
+        {
+			if (string.IsNullOrEmpty(discussion.Theme))
+            {
+				ViewData["Message"] = "Тема дискуссии не задана";
+				return View();
+			}
+			if (discussion.Creater == null)
+            {
+				ViewData["Message"] = "Не удалось определить создателя дискуссии";
+				return View();
+			}
+			return View();
+        }
+		[HttpPost]
+		public IActionResult AddComment(Comment comment)
+        {
+			if (string.IsNullOrEmpty(comment.Body))
+            {
+				ViewData["Message"] = "Тело комментария не задано";
+				return View();
+			}
+			if (comment.Discuss == null)
+            {
+				ViewData["Message"] = "Не удалось определить дискуссию";
+				return View();
+			}
+			if (comment.Creater == null)
+            {
+				ViewData["Message"] = "Не удалось определить автора комментария";
+				return View();
+			}
+			return View();
+        }
 	}
 }

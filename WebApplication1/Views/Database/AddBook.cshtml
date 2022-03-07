@@ -1,0 +1,41 @@
+﻿@model WebApplication1.Models.Book
+
+@{
+    ViewData["Title"] = "Добавление новой книги";
+}
+
+<h1>Новая книга</h1>
+<p align="justify">Уважаемый посетитель! <br>Для добавления книги на портал заполните следующую форму и нажимите "Добавить"</p>
+
+<form asp-controller="Database" asp-action="AddBook">
+    <div>
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input type="text" asp-for="Name" class="form-control">
+        </div>
+        <div class="form-group">
+            <label asp-for="Publisher"></label>
+            <input type="text" asp-for="Publisher" class="form-control">
+        </div>
+        <div class="form-group">
+            <label asp-for="CreatingYear"></label>
+            <input type="number" asp-for="CreatingYear" class="form-control">
+        </div>
+        <div class="form-group">
+            <label asp-for="Count"></label>
+            <input type="number" asp-for="Count" class="form-control">
+        </div>
+        <div class="form-group">
+            <label asp-for="ContentUri"></label>
+            <input type="url" asp-for="ContentUri" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Добавить" class="btn btn-outline-secondary">
+        </div>
+    </div>
+</form>
+
+@if (ViewData.Keys.Contains("Message"))
+{
+    <h4 style="color: red">@ViewData["Message"]</h4>
+}

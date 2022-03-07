@@ -19,6 +19,8 @@ namespace WebApplication1.Models
 		public Discussion(string id, string theme, User creater):
 			this(id, theme, creater, DateTime.Now)
 		{}
+		public Discussion(): this("", "", null)
+		{}
 
 		public static Discussion getDiscussionById(string id)
 		{

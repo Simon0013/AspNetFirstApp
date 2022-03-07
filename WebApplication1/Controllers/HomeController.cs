@@ -38,6 +38,21 @@ namespace WebApplication1.Controllers
             return View("~/Views/Database/Autorisation.cshtml");
         }
 
+        public IActionResult AddBook()
+        {
+            return View("~/Views/Database/AddBook.cshtml");
+        }
+
+        public IActionResult CreateDiscussion()
+        {
+            return View("~/Views/Database/CreateDiscussion.cshtml");
+        }
+
+        public IActionResult AddComment()
+        {
+            return View("~/Views/Database/AddComment.cshtml");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

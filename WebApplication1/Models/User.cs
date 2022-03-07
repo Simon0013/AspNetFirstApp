@@ -65,9 +65,9 @@ namespace WebApplication1.Models
 				return false;
 			return false;
 		}
-		public bool addNewComment(string id, Discussion discussion)
+		public bool addNewComment(string id, string body, Discussion discussion)
         {
-			Comment comment = new Comment(id, discussion, this);
+			Comment comment = new Comment(id, body, discussion, this);
 			if (comment.addInDatabase())
 				return true;
 			return false;
