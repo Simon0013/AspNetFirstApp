@@ -1,0 +1,47 @@
+﻿@model ApplicationContext
+
+@{
+    ViewData["Title"] = "Дискуссии";
+}
+
+<h1>Дискуссии</h1>
+<a asp-action="CreateDiscussion" asp-controller="Database">Добавить дискуссию</a>
+<table class="table">
+    <tr>
+        <td>Тема</td>
+        <td>Создатель</td>
+        <td>Дата создания</td>
+    </tr>
+
+    @foreach (Discussion discussion in Model.Discussions.ToList())
+    {
+        <tr>
+            <td>@discussion.Theme</td><td>@Model.Users.Find(discussion.CreaterId).Surname @Model.Users.Find(discussion.CreaterId).Name @Model.Users.Find(discussion.CreaterId).Patronymic</td><td>@discussion.CreatingDate</td>
+            <td><a asp-action="ShowDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Просмотреть</a></td>
+            @{ 
+                string email = User.Identity.Name;
+                User userFound = Model.Users.FirstOrDefault(u => u.Email == email);
+                bool flag = false;
+                foreach (Members_discussions member in Model.Members_discussions.Where(p => p.Discuss_id == discussion.Id).ToList())
+                {
+                    if (member.User_id == userFound.Id)
+                    {
+                        <td><a asp-action="LeaveDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Покинуть дискуссию</a></td>
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    <td><a asp-action="JoinToDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Вступить в дискуссию</a></td>
+                }
+            }
+            <td><a asp-action="DeleteDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Удалить</a></td>
+        </tr>
+    }
+</table>
+
+@if (ViewData.ContainsKey("Message"))
+{
+    <h4>@ViewData["Message"]</h4>
+}

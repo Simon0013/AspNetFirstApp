@@ -5,7 +5,8 @@ namespace WebApplication1.Models
 {
 	public class User
 	{
-		public string Id { get; set; }
+		[Key]
+		public int Id { get; set; }
 		[Display(Name = "Имя")]
 		public string Name { get; set; }
 		[Display(Name = "Фамилия")]
@@ -20,7 +21,7 @@ namespace WebApplication1.Models
 		[Display(Name = "Пароль")]
 		public string Password { get; set; }
 
-		public User(string id, string name, string surname, string patronymic, DateTime registration, bool isAdmin, string email, string password)
+		public User(int id, string name, string surname, string patronymic, DateTime registration, bool isAdmin, string email, string password)
 		{
 			Id = id;
 			Name = name;
@@ -31,57 +32,84 @@ namespace WebApplication1.Models
 			Email = email;
 			Password = password;
 		}
-		public User(string id, string name, string surname, DateTime registration, bool isAdmin, string email, string password):
+		public User(int id, string name, string surname, DateTime registration, bool isAdmin, string email, string password):
 			this(id, name, surname, "-", registration, isAdmin, email, password)
 		{}
-		public User(string id, string name, string surname, string patronymic, bool isAdmin, string email, string password):
+		public User(int id, string name, string surname, string patronymic, bool isAdmin, string email, string password):
 			this(id, name, surname, patronymic, DateTime.Now, isAdmin, email, password)
 		{}
-		public User(string id, string name, string surname, bool isAdmin, string email, string password) :
+		public User(int id, string name, string surname, bool isAdmin, string email, string password) :
 			this(id, name, surname, DateTime.Now, isAdmin, email, password)
 		{}
-		public User(): this("", "", "", false, "", "")
+		public User(): this(0, "", "", false, "", "")
         {}
 
-		public static User getUserById(string id)
+		public bool addInDatabase(ApplicationContext db)
         {
-			return null;
-        }
-		public bool addInDatabase()
-        {
-			if (inDatabase())
+			if (inDatabase(db))
 				return false;
-			return false;
-		}
-		public bool dropFromDatabase()
-        {
-			if (!inDatabase())
+			try
+            {
+				db.Users.Add(this);
+				db.SaveChanges();
+				return true;
+            }
+			catch
+            {
 				return false;
-			return false;
+            }
 		}
-		public static bool dropFromDatabaseById(string id)
+		public bool dropFromDatabase(ApplicationContext db)
         {
-			if (!getUserById(id).inDatabase())
+			if (!inDatabase(db))
 				return false;
-			return false;
+			try
+			{
+				db.Users.Remove(this);
+				db.SaveChanges();
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
-		public bool addNewComment(string id, string body, Discussion discussion)
+		public static bool dropFromDatabaseById(int id, ApplicationContext db)
+        {
+			User user = db.Users.Find(id);
+			if (user == null)
+				return false;
+			try
+            {
+				db.Users.Remove(user);
+				db.SaveChanges();
+				return true;
+            }
+			catch
+            {
+				return false;
+            }
+		}
+		public bool addNewComment(int id, string body, Discussion discussion, ApplicationContext db)
         {
 			Comment comment = new Comment(id, body, discussion, this);
-			if (comment.addInDatabase())
+			if (comment.addInDatabase(db))
 				return true;
 			return false;
         }
-		public bool createDiscussion(string id, string theme)
+		public bool createDiscussion(int id, string theme, ApplicationContext db)
         {
 			Discussion discussion = new Discussion(id, theme, this);
-			if (discussion.addInDatabase())
+			if (discussion.addInDatabase(db))
 				return true;
 			return false;
 		}
-		public bool inDatabase()
+		public bool inDatabase(ApplicationContext db)
         {
-			return false;
+			User user = db.Users.Find(Id);
+			if (user == null)
+				return false;
+			return true;
         }
 	}
 }

@@ -1,17 +1,24 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
 {
 	public class Book
 	{
-		public string Id { get; set; }
+		[Key]
+		public int Id { get; set; }
+		[Display(Name = "Название")]
 		public string Name { get; set; }
+		[Display(Name = "Издательство")]
 		public string Publisher { get; set; }
+		[Display(Name = "Год выпуска")]
 		public int CreatingYear { get; set; }
+		[Display(Name = "Количество в наличии")]
 		public int Count { get; set; }
+		[Display(Name = "Ссылка на содержимое")]
 		public Uri ContentUri { get; set; }
 		
-		public Book(string id, string name, string publisher, int creatingYear, int count, Uri contentUri)
+		public Book(int id, string name, string publisher, int creatingYear, int count, Uri contentUri)
 		{
 			Id = id;
 			Name = name;
@@ -20,34 +27,61 @@ namespace WebApplication1.Models
 			Count = count;
 			ContentUri = contentUri;
 		}
-		public Book(): this("", "", "", DateTime.Now.Year, 0, null)
+		public Book(): this(0, "", "", DateTime.Now.Year, 0, null)
         {}
 
-		public static Book getBookById(string id)
-        {
-			return null;
-        }
-		public bool addInDatabase()
+		public bool addInDatabase(ApplicationContext db)
 		{
-			if (inDatabase())
+			if (inDatabase(db))
 				return false;
-			return false;
-		}
-		public bool dropFromDatabase()
-		{
-			if (!inDatabase())
+			try
+			{
+				db.Books.Add(this);
+				db.SaveChanges();
+				return true;
+			}
+			catch
+			{
 				return false;
-			return false;
+			}
 		}
-		public static bool dropFromDatabaseById(string id)
+		public bool dropFromDatabase(ApplicationContext db)
 		{
-			if (!getBookById(id).inDatabase())
+			if (!inDatabase(db))
 				return false;
-			return false;
+			try
+			{
+				db.Books.Remove(this);
+				db.SaveChanges();
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
-		public bool inDatabase()
+		public static bool dropFromDatabaseById(int id, ApplicationContext db)
 		{
-			return false;
+			Book book = db.Books.Find(id);
+			if (book == null)
+				return false;
+			try
+			{
+				db.Books.Remove(book);
+				db.SaveChanges();
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+		public bool inDatabase(ApplicationContext db)
+		{
+			Book book = db.Books.Find(Id);
+			if (book == null)
+				return false;
+			return true;
 		}
 	}
 }

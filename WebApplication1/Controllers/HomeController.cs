@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,11 +14,10 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private ApplicationContext db;
+        public HomeController(ApplicationContext context)
         {
-            _logger = logger;
+            db = context;
         }
 
         public IActionResult Index()
@@ -30,27 +32,33 @@ namespace WebApplication1.Controllers
 
         public IActionResult Registration()
         {
+            if (User.Identity.IsAuthenticated)
+                return View("AlreadyAuthenticated");
             return View("~/Views/Database/Registration.cshtml");
         }
 
         public IActionResult Autorisation()
         {
+            if (User.Identity.IsAuthenticated)
+                return View("AlreadyAuthenticated");
             return View("~/Views/Database/Autorisation.cshtml");
         }
 
-        public IActionResult AddBook()
+        [Authorize]
+        public async Task<IActionResult> Logout()
         {
-            return View("~/Views/Database/AddBook.cshtml");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Autorisation", "Home");
         }
 
-        public IActionResult CreateDiscussion()
+        public IActionResult Book()
         {
-            return View("~/Views/Database/CreateDiscussion.cshtml");
+            return View("~/Views/Database/Books.cshtml", db);
         }
 
-        public IActionResult AddComment()
+        public IActionResult Discussion()
         {
-            return View("~/Views/Database/AddComment.cshtml");
+            return View("~/Views/Database/Discussions.cshtml", db);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

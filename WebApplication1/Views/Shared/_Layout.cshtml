@@ -31,14 +31,17 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Autorisation">Авторизация</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddBook">Книги</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Book">Книги</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateDiscussion">Дискуссии</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Discussion">Дискуссии</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddComment">Комментарии</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Выход</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

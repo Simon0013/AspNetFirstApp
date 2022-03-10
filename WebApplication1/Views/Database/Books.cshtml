@@ -1,0 +1,26 @@
+﻿@model ApplicationContext
+
+@{
+    ViewData["Title"] = "Книги";
+}
+
+<h1>Книги на портале</h1>
+<a asp-action="AddBook" asp-controller="Database">Добавить книгу</a>
+<table class="table">
+    <tr>
+        <td>Название</td><td>Издательство</td><td>Год выпуска</td><td>Количество в наличии</td><td>Ссылка на содержимое</td>
+    </tr>
+
+    @foreach (Book book in Model.Books.ToList())
+    {
+        <tr>
+            <td>@book.Name</td><td>@book.Publisher</td><td>@book.CreatingYear</td><td>@book.Count</td><td><a href="@book.ContentUri">@book.ContentUri</a></td>
+            <td><a asp-action="EditBook" asp-controller="Database" asp-route-id="@book.Id">Редактировать</a></td><td><a asp-action="DeleteBook" asp-controller="Database" asp-route-id="@book.Id">Удалить</a></td>
+        </tr>
+    }
+</table>
+
+@if (ViewData.ContainsKey("Message"))
+{
+    <h4>@ViewData["Message"]</h4>
+}

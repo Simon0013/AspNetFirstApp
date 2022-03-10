@@ -1,0 +1,39 @@
+﻿@model Dictionary<ApplicationContext, Discussion>
+
+@{
+    ViewData["Title"] = "Дискуссия";
+}
+
+<h1>Дискуссия</h1>
+<h4>Тема: @Model.Values.ElementAt(0).Theme</h4>
+<h4></h4>
+<br>
+<h1>Комментарии</h1>
+
+@if (Model.Keys.ElementAt(0).Comments.Where(p => p.DiscussId == @Model.Values.ElementAt(0).Id).ToList().Count == 0)
+{
+    <p>В этой дискуссии пока нет ни одного комментария. Оставьте комментарий первыми!</p>
+}
+else
+{
+    @foreach (Comment comment in Model.Keys.ElementAt(0).Comments.Where(p => p.DiscussId == @Model.Values.ElementAt(0).Id).ToList())
+    {
+        if (comment.DiscussId == Model.Values.ElementAt(0).Id)
+        {
+            <textarea class="form-control" readonly="readonly">@comment.Body</textarea>
+            <p>Дата создания: @comment.CreatingDate</p>
+            <p>
+                Автор: @Model.Keys.ElementAt(0).Users.Find(comment.CreaterId).Surname  @Model.Keys.ElementAt(0).Users.Find(comment.CreaterId).Name @Model.Keys.ElementAt(0).Users.Find(comment.CreaterId).Patronymic
+                <a asp-action="DeleteComment" asp-controller="Database" asp-route-id="@comment.Id">Удалить комментарий</a>
+            </p>
+            <br>
+        }
+    }
+}
+
+<a asp-action="AddComment" asp-controller="Database" asp-route-id="@Model.Values.ElementAt(0).Id">Добавить комментарий</a>
+
+@if (ViewData.ContainsKey("Message"))
+{
+    <h4>@ViewData["Message"]</h4>
+}
