@@ -20,20 +20,23 @@
             <td><a asp-action="ShowDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Просмотреть</a></td>
             @{ 
                 string email = User.Identity.Name;
-                User userFound = Model.Users.FirstOrDefault(u => u.Email == email);
-                bool flag = false;
-                foreach (Members_discussions member in Model.Members_discussions.Where(p => p.Discuss_id == discussion.Id).ToList())
+                if (!string.IsNullOrEmpty(email))
                 {
-                    if (member.User_id == userFound.Id)
+                    User userFound = Model.Users.FirstOrDefault(u => u.Email == email);
+                    bool flag = false;
+                    foreach (Members_discussions member in Model.Members_discussions.Where(p => p.Discuss_id == discussion.Id).ToList())
                     {
-                        <td><a asp-action="LeaveDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Покинуть дискуссию</a></td>
-                        flag = true;
-                        break;
+                        if (member.User_id == userFound.Id)
+                        {
+                            <td><a asp-action="LeaveDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Покинуть дискуссию</a></td>
+                            flag = true;
+                            break;
+                        }
                     }
-                }
-                if (!flag)
-                {
-                    <td><a asp-action="JoinToDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Вступить в дискуссию</a></td>
+                    if (!flag)
+                    {
+                        <td><a asp-action="JoinToDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Вступить в дискуссию</a></td>
+                    }
                 }
             }
             <td><a asp-action="DeleteDiscussion" asp-controller="Database" asp-route-id="@discussion.Id">Удалить</a></td>
