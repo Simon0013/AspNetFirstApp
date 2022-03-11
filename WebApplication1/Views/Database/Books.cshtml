@@ -11,7 +11,7 @@
 
     @foreach (Book book in Model.Books.ToList())
     {
-        <div class="col">
+        <div class="col" style="margin-bottom: 20px">
             <div class="card">
                 @if (string.IsNullOrEmpty(book.ImageUri))
                 {
