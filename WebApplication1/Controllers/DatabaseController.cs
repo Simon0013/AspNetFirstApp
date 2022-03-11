@@ -145,6 +145,11 @@ namespace WebApplication1.Controllers
         {
 			if (img.BookImg != null)
             {
+				if (!img.BookImg.ContentType.Contains("image"))
+                {
+					ViewData["Message"] = "Это не изображение. Необходимо выбрать медиа файл с расширением png, jpg, jpeg и других форматов изображений.";
+					return View();
+				}
 				string path = "/images/" + img.BookImg.FileName;
 				using (FileStream fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
