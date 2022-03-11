@@ -11,15 +11,20 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace WebApplication1.Controllers
 {
 	public class DatabaseController: Controller
 	{
 		private ApplicationContext db;
-		public DatabaseController(ApplicationContext context)
+		private IWebHostEnvironment _appEnvironment;
+		public DatabaseController(ApplicationContext context, IWebHostEnvironment appEnvironment)
         {
 			db = context;
+			_appEnvironment = appEnvironment;
         }
 		private async Task Authenticate(string userName)
 		{
@@ -126,6 +131,40 @@ namespace WebApplication1.Controllers
 			if (book.addInDatabase(db))
 				return View("Books", db);
 			ViewData["Message"] = "Не удалось добавить новую книгу";
+			return View();
+        }
+		[Authorize]
+		[HttpGet]
+		public IActionResult AddBookImg(int id)
+        {
+			ViewData["BookId"] = id;
+			return View();
+        }
+		[HttpPost]
+		public IActionResult AddBookImg(BookImage img)
+        {
+			if (img.BookImg != null)
+            {
+				string path = "/images/" + img.BookImg.FileName;
+				using (FileStream fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+					img.BookImg.CopyTo(fileStream);
+                }
+				Book book = db.Books.Find(img.BookId);
+				book.ImageUri = "~" + path;
+				try
+                {
+					db.Books.Update(book);
+					db.SaveChanges();
+					return View("Books", db);
+                }
+				catch
+                {
+					ViewData["Message"] = "Не удалось добавить ссылку на изображение";
+					return View();
+				}
+            }
+			ViewData["Message"] = "Не выбрано изображение";
 			return View();
         }
 		[Authorize]

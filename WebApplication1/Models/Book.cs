@@ -17,8 +17,9 @@ namespace WebApplication1.Models
 		public int Count { get; set; }
 		[Display(Name = "Ссылка на содержимое")]
 		public Uri ContentUri { get; set; }
+		public string ImageUri { get; set; }
 		
-		public Book(int id, string name, string publisher, int creatingYear, int count, Uri contentUri)
+		public Book(int id, string name, string publisher, int creatingYear, int count, Uri contentUri, string imageUri)
 		{
 			Id = id;
 			Name = name;
@@ -26,8 +27,9 @@ namespace WebApplication1.Models
 			CreatingYear = creatingYear;
 			Count = count;
 			ContentUri = contentUri;
+			ImageUri = imageUri;
 		}
-		public Book(): this(0, "", "", DateTime.Now.Year, 0, null)
+		public Book(): this(0, "", "", DateTime.Now.Year, 0, null, "")
         {}
 
 		public bool addInDatabase(ApplicationContext db)

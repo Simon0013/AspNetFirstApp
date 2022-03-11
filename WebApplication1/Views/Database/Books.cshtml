@@ -5,22 +5,49 @@
 }
 
 <h1>Книги на портале</h1>
-<a asp-action="AddBook" asp-controller="Database">Добавить книгу</a>
-<table class="table">
-    <tr>
-        <td>Название</td><td>Издательство</td><td>Год выпуска</td><td>Количество в наличии</td><td>Ссылка на содержимое</td>
-    </tr>
+<p><a asp-action="AddBook" asp-controller="Database">Добавить книгу</a></p>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
 
     @foreach (Book book in Model.Books.ToList())
     {
-        <tr>
-            <td>@book.Name</td><td>@book.Publisher</td><td>@book.CreatingYear</td><td>@book.Count</td><td><a href="@book.ContentUri">@book.ContentUri</a></td>
-            <td><a asp-action="EditBook" asp-controller="Database" asp-route-id="@book.Id">Редактировать</a></td><td><a asp-action="DeleteBook" asp-controller="Database" asp-route-id="@book.Id">Удалить</a></td>
-        </tr>
+        <div class="col">
+            <div class="card">
+                @if (string.IsNullOrEmpty(book.ImageUri))
+                {
+                    <img src="@Url.Content("~/images/noimage.png")" class="card-img-top" alt="...">
+                }
+                else
+                {
+                    <img src="@Url.Content(book.ImageUri.ToString())" class="card-img-top" alt="...">
+                }
+            <div class="card-body">
+                <h5 class="card-title">@book.Name</h5>
+                <p class="card-text">Издатель: @book.Publisher</p>
+                <p class="card-text">Год выпуска: @book.CreatingYear</p>
+                <p class="card-text">Количество в наличии: @book.Count</p>
+                <p class="card-text">Ссылка на содержимое: <a href="@book.ContentUri">@book.ContentUri</a></p>
+                @if (string.IsNullOrEmpty(book.ImageUri))
+                {
+                    <p class="card-text"><a asp-action="AddBookImg" asp-controller="Database" asp-route-id="@book.Id">Добавить изображение</a></p>
+                }
+                else
+                {
+                    <p class="card-text"><a asp-action="AddBookImg" asp-controller="Database" asp-route-id="@book.Id">Изменить изображение</a></p>
+                }
+                <table class="table">
+                    <tr>
+                        <td><a asp-action="EditBook" asp-controller="Database" asp-route-id="@book.Id">Редактировать</a></td>
+                        <td><a asp-action="DeleteBook" asp-controller="Database" asp-route-id="@book.Id">Удалить</a></td>
+                    </tr>
+                </table>
+            </div>
+            </div>
+        </div>
     }
-</table>
+</div>
 
-@if (ViewData.ContainsKey("Message"))
-{
-    <h4>@ViewData["Message"]</h4>
-}
+    @if (ViewData.ContainsKey("Message"))
+    {
+        <h4>@ViewData["Message"]</h4>
+    }
