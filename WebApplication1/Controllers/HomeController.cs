@@ -45,6 +45,12 @@ namespace WebApplication1.Controllers
         }
 
         [Authorize]
+        public IActionResult DelAccount()
+        {
+            return View("~/Views/Database/DelAccount.cshtml");
+        }
+
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

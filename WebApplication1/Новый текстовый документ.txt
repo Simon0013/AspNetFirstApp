@@ -1,0 +1,36 @@
+create table users (
+id int not null primary key identity,
+name nvarchar(50) not null,
+surname nvarchar(70) not null,
+patronymic nvarchar(50),
+registration datetime not null,
+isAdmin bit,
+email nvarchar(50) not null,
+password nvarchar(30) not null);
+
+create table books (
+id int not null primary key identity,
+name nvarchar(50) not null,
+publisher nvarchar(50) not null,
+creatingYear int not null,
+count int,
+contentUri nvarchar(200) not null,
+imageUri nvarchar(200));
+
+create table discussions (
+id int not null primary key identity,
+theme nvarchar(30) not null,
+createrId int not null references users(id),
+creatingDate datetime not null);
+
+create table comments (
+id int not null primary key identity,
+body nvarchar(1000) not null,
+discussId int not null references discussions(id),
+createrId int not null references users(id),
+creatingDate datetime not null);
+
+create table members_discussions (
+id int not null primary key identity,
+discuss_Id int not null references discussions(id),
+user_Id int not null references users(id));

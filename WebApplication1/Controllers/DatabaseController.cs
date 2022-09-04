@@ -57,6 +57,13 @@ namespace WebApplication1.Controllers
 			}
 			if (string.IsNullOrEmpty(user.Patronymic))
 				user.Patronymic = "-";
+			int indx1 = user.Email.IndexOf("@");
+			int indx2 = user.Email.IndexOf(".");
+			if ((indx1 < 1) || ((indx2 - indx1) < 2))
+            {
+				ViewData["Message"] = "E-mail введен некорректно";
+				return View();
+			}
 			User userFound = await db.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 			if (userFound == null)
 			{
@@ -96,6 +103,33 @@ namespace WebApplication1.Controllers
 			ViewData["Message"] = "Неверный логин или пароль пользователя";
 			return View();
         }
+		[Authorize]
+		[HttpPost]
+		public async Task<IActionResult> DelAccount(User user)
+        {
+			string email = User.Identity.Name;
+			if (user.Email != email)
+            {
+				ViewData["Message"] = "Данные учётной записи введены неправильно!";
+				return View();
+            }
+			User userFound = await db.Users.FirstOrDefaultAsync(u => u.Email == email);
+			if (userFound != null)
+            {
+				if (user.Password == userFound.Password)
+                {
+					if (Models.User.dropFromDatabaseById(userFound.Id, db))
+                    {
+						await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+						return RedirectToAction("Autorisation", "Home");
+					}
+					ViewData["Message"] = "Не удалось удалить учётную запись по техническим причинам! " + userFound.Id;
+					return View();
+				}
+            }
+			ViewData["Message"] = "Данные учётной записи введены неправильно!";
+			return View();
+		}
 		[Authorize]
 		[HttpGet]
 		public async Task<IActionResult> AddBook()
