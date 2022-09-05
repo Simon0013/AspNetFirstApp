@@ -20,8 +20,17 @@ namespace WebApplication1.Controllers
             db = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                string email = User.Identity.Name;
+                User userFound = db.Users.FirstOrDefault(u => u.Email == email);
+                if (userFound == null)
+                {
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+            }
             return View();
         }
 
