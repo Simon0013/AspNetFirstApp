@@ -95,7 +95,7 @@ namespace WebApplication1.Controllers
 				return View();
 			}
 			User userFound = await db.Users.FirstOrDefaultAsync(u => u.Email == user.Email && u.Password == user.Password);
-			if (userFound != null)
+			if (userFound != null && userFound.Email != "0")
 			{
 				await Authenticate(user.Email);
 				return View("SuccessLogin");
